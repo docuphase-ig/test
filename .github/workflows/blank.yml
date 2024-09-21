@@ -1,0 +1,38 @@
+name: Plan and Apply Terraform
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'target environment name'
+        required: true
+        type: choice
+        options:
+          - development
+          - qa
+          - production
+        default: 'development'
+
+jobs:
+  Plan-Terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Run Terraform Plan
+        run: |
+           echo "Running Terraform plan"
+
+  Apply-Terraform:
+    runs-on: ubuntu-latest
+    needs: Plan-Terraform
+    environment:
+      name: dev  # Use the environment you set up (e.g., 'production')
+      # url: https://example.com # Optional, link to the deployment for visibility
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Apply Terraform
+        run: |
+           echo "Applying Terraform"
+
